@@ -1,0 +1,147 @@
+/* TODO: Add your custom styles here
+ * 
+ * Suggested structure:
+ * - Search form styles
+ * - City cards/list styles
+ * - Loading spinner animation
+ * - Responsive design for mobile
+ * 
+ * Feel free to be creative with the design!
+ */
+
+.app {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.app-header {
+  background: white;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.app-header h1 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+  font-size: 2.5rem;
+}
+
+.app-header p {
+  margin: 0;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Health Check - Working Example */
+.health-check {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.health-check h3 {
+  margin: 0 0 1rem 0;
+  color: #333;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.health-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.health-status.healthy {
+  background: #d4edda;
+  color: #155724;
+}
+
+.health-status.unhealthy {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.health-status.checking {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.health-note {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+.health-note code {
+  background: #f5f5f5;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  color: #d63384;
+}
+
+.message {
+  background: white;
+  padding: 3rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.message p {
+  margin: 0.5rem 0;
+  color: #666;
+}
+
+.message.error {
+  background: #fee;
+  color: #c33;
+}
+
+.message.error p {
+  color: #c33;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .app-header h1 {
+    font-size: 1.8rem;
+  }
+}
+
