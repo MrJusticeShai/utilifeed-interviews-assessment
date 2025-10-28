@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { checkHealth, fetchCities } from './api'
+import { checkHealth, fetchCities, fetchCity } from './api'
 import './App.css'
 
 function App() {
@@ -22,7 +22,7 @@ function App() {
   // Keep track of the search input
   const [searchQuery, setSearchQuery] = useState('')
 
-  // Sorting state
+  // Sorting state : sortConfig is 'city'
   const [sortConfig, setSortConfig] = useState({ key: 'city', direction: 'asc' })
 
   useEffect(() => {
@@ -39,44 +39,51 @@ function App() {
     }
   }
 
-  // Fetch city data from backend
-  const loadCities = async (query = '') => {
-    setLoadingCities(true)
-    setCitiesError(null)
+  const handleExactSearch = async () => {
+    if (!searchQuery) return;
+
+    setLoadingCities(true);
+    setCitiesError(null);
 
     try {
-      if (query) {
-        const data = await fetchCities(query) // Partial search
-        const citiesFound = data.cities || {}
-
-        // Check for exact match (case-insensitive)
-        const exactMatchKey = Object.keys(citiesFound).find(
-          city => city.toLowerCase() === query.toLowerCase()
-        )
-
-        if (exactMatchKey) {
-          try {
-            const exactCityData = await fetchCity(exactMatchKey)
-            setCities({ [exactMatchKey]: exactCityData.statistics }) // Show only exact match
-          } catch (err) {
-            console.warn(`Exact fetch failed for city "${exactMatchKey}"`, err)
-            setCities({ [exactMatchKey]: citiesFound[exactMatchKey] }) // fallback
-          }
-        } else {
-          setCities(citiesFound)
-          if (Object.keys(citiesFound).length === 0) {
-            setCitiesError(`No cities found for "${query}"`)
-          }
-        }
-      } else {
-        const data = await fetchCities('')
-        setCities(data.cities || {})
-      }
+      const exactCityData = await fetchCity(searchQuery);
+      setCities({ [searchQuery]: exactCityData.statistics });
     } catch (err) {
-      setCitiesError('Failed to load city data.')
-      setCities({})
+      setCitiesError(`No city found with the name "${searchQuery}"`);
+      setCities({});
     } finally {
-      setLoadingCities(false)
+      setLoadingCities(false);
+    }
+  }
+
+  // Fetch city data from backend
+  const loadCities = async (query = '') => {
+    setLoadingCities(true);
+    setCitiesError(null);
+
+    try {
+      let data;
+
+      if (query) {
+        // Fetch filtered results based on search query
+        data = await fetchCities(query);
+      } else {
+        // Fetch all cities if query is empty
+        data = await fetchCities('');
+      }
+
+      const citiesFound = data.cities || {};
+
+      if (Object.keys(citiesFound).length === 0) {
+        setCitiesError(`No cities found for "${query}"`);
+      }
+
+      setCities(citiesFound);
+    } catch (err) {
+      setCitiesError('Failed to load city data.');
+      setCities({});
+    } finally {
+      setLoadingCities(false);
     }
   }
 
@@ -149,8 +156,17 @@ function App() {
               placeholder="Search cities"
               value={searchQuery}
               onChange={handleSearchChange}
-            />
+            /> 
+              <button 
+                onClick={handleExactSearch} 
+                className="exact-search-button"
+                disabled={!searchQuery}
+              >
+                Fetch Exact
+              </button>
           </div>
+
+          
 
           <div className="city-messages">
             {loadingCities && <p>Loading cities...</p>}
