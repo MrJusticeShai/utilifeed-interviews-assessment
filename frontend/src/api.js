@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'http://127.0.0.1:5000';
 
 /**
  * TODO: Implement this function to fetch all cities with their temperature statistics
@@ -16,8 +16,18 @@ const API_BASE_URL = 'http://localhost:5000';
  * Hint: Don't forget to handle errors appropriately
  */
 export async function fetchCities(searchQuery = '') {
-  // TODO: Implement this function
-  throw new Error('fetchCities not yet implemented - this is part of your task!');
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/cities${searchQuery ? `?search=${encodeURIComponent(searchQuery)}` : ''}`);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error checking API health:', error);
+    throw error;
+  }
 }
 
 /**
@@ -36,8 +46,23 @@ export async function fetchCities(searchQuery = '') {
  * Hint: Handle 404 errors for cities that don't exist
  */
 export async function fetchCity(cityName) {
-  // TODO: Implement this function
-  throw new Error('fetchCity not yet implemented - this is part of your task!');
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/cities/${encodeURIComponent(cityName)}`);
+
+    if (response.status === 404) {
+      console.warn(`City "${cityName}" not found.`);
+      return null;
+    }
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error(`Error fetching city "${cityName}":`, error);
+    throw error;
+  }
 }
 
 /**

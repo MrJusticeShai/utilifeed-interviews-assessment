@@ -145,3 +145,66 @@
   }
 }
 
+/* Container spacing */
+.city-dashboard {
+  margin-top: 1rem;
+}
+
+/* Search input */
+.city-search input {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 1rem;
+}
+
+/* Table styling */
+.city-table-wrapper {
+  overflow-x: auto; /* horizontal scroll on small screens */
+}
+
+.city-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+}
+
+.city-table th,
+.city-table td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+
+.city-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.city-table th:nth-child(n+2) {
+  text-align: right;
+}
+
+.city-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.city-table tbody tr:hover {
+  background-color: #e0f7fa;
+}
+
+/* Numeric alignment for min/max/mean/count */
+.city-table td:nth-child(n+2) {
+  text-align: right;
+}
+
+
+/* Error messages */
+.error {
+  color: red;
+  font-weight: bold;
+}
+

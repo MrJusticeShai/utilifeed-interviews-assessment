@@ -1,12 +1,30 @@
 import { useState, useEffect } from 'react'
-import { checkHealth } from './api'
+import { checkHealth, fetchCities } from './api'
 import './App.css'
 
 function App() {
+  // -------------------------
+  // State Management
+  // -------------------------
+
+  // Store API health information
   const [apiHealth, setApiHealth] = useState(null)
+
+  // Store city data returned from API
+  const [cities, setCities] = useState({})
+
+  // Track loading state for cities API call
+  const [loadingCities, setLoadingCities] = useState(false)
+
+  // Track errors when fetching cities
+  const [citiesError, setCitiesError] = useState(null)
+
+  // Keep track of the search input
+  const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
     checkApiHealth()
+    loadCities()
   }, [])
 
   const checkApiHealth = async () => {
@@ -18,26 +36,35 @@ function App() {
     }
   }
 
-  // TODO: Implement the UI to display the city data
-  // 
-  // Your task:
-  // 1. Create a layout to display the cities data
-  // 2. Show each city's min, max, and mean temperatures
-  // 3. Add a search input to filter cities (use the searchQuery state)
-  // 4. Display loading state while data is being fetched
-  // 5. Display error messages if the API fails
-  // 6. Handle the case when no cities are found
-  //
-  // The data structure in `cities` is:
-  // {
-  //   "CityName": { min: number, max: number, mean: number, count: number },
-  //   ...
-  // }
-  //
-  // Hints:
-  // - Use Object.entries(cities) to iterate over the cities
-  // - Call loadCities(query) to fetch filtered results
-  // - The loading, error, and totalCities states are already managed
+  // Fetch city data from backend
+  const loadCities = async (query = '') => {
+    setLoadingCities(true)  // Set loading state before fetch
+    setCitiesError(null)    // Clear previous errors
+
+    try {
+      const data = await fetchCities(query) // Call /api/cities?search=query
+      setCities(data.cities || {})          // Update cities state
+    } catch (err) {
+      setCitiesError('Failed to load city data. Please try again.') // Error message
+      setCities({})                         // Clear previous data on error
+    } finally {
+      setLoadingCities(false)               // Done loading
+    }
+  }
+
+  // -------------------------
+  // Event Handlers
+  // -------------------------
+
+  // Called whenever the search input changes
+  const handleSearchChange = (e) => {
+    const query = e.target.value
+    setSearchQuery(query)       // Update input state
+    loadCities(query)           // Fetch filtered city data
+  }
+
+
+
 
   return (
     <div className="app">
@@ -72,10 +99,54 @@ function App() {
           </p>
         </div>
 
-        <div className="message">
-          <p>TODO: Display the cities data here!</p>
-          <p>Check the comments above for implementation guidance.</p>
+        <div className="city-dashboard">
+          <div className="city-search">
+            <input
+              type="text"
+              placeholder="Search cities"
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
+          </div>
+
+          <div className="city-messages">
+            {loadingCities && <p>Loading cities...</p>}
+            {citiesError && <p className="error">{citiesError}</p>}
+            {!loadingCities && !citiesError && Object.keys(cities).length === 0 && (
+              <p>No cities found.</p>
+            )}
+          </div>
+
+          {Object.keys(cities).length > 0 && (
+            <div className="city-table-wrapper">
+              <table className="city-table">
+                <thead>
+                  <tr>
+                    <th>City</th>
+                    <th>Min</th>
+                    <th>Max</th>
+                    <th>Mean</th>
+                    <th>Count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Object.entries(cities).map(([cityName, stats]) => (
+                    <tr key={cityName}>
+                      <td>{cityName}</td>
+                      <td>{stats.min}</td>
+                      <td>{stats.max}</td>
+                      <td>{stats.mean}</td>
+                      <td>{stats.count}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              <p>Total cities: {Object.keys(cities).length}</p>
+            </div>
+          )}
         </div>
+
       </div>
     </div>
   )
