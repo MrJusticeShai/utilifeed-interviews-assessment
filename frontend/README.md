@@ -11,19 +11,24 @@ A React-based web application starter for visualizing weather temperature statis
 
 ## Setup
 
-1. Navigate to the frontend directory:
+1. Clone the repository
+```bash
+git clone git@github.com:MrJusticeShai/utilifeed-interviews-assessment.git
+```
+
+2. Navigate to the frontend directory:
 ```bash
 cd frontend
 ```
 
-2. Install dependencies:
+3. Install dependencies:
 ```bash
 npm install
 ```
 
 ## Running the Application
 
-Start the development server:
+4. Start the development server:
 ```bash
 npm run dev
 ```
@@ -31,9 +36,11 @@ npm run dev
 The application will start on `http://localhost:3000`
 
 **Note:** 
-- The backend API must be running on `http://localhost:5000`
+- The backend API must be running on `http://localhost:5001`
 - The API functions in `src/api.js` need to be implemented first
 - The UI is provided but will show errors until the API is implemented
+
+> For some reason, http://localhost:5000 didn't want to work locally, so I switched to `http://localhost:5001`
 
 ## Building for Production
 

@@ -1,8 +1,8 @@
 # Weather API - Backend
 
-A Flask-based REST API starter for processing weather measurement data and providing temperature statistics for cities around the world.
+A Flask-based REST API for processing weather measurement data and providing temperature statistics for cities around the world.
 
-**Note**: This is a starter implementation. The main endpoints need to be implemented as part of the technical test.
+**Note**: This is the implementation. The main endpoints are implemented as part of the technical test.
 
 ## Prerequisites
 
@@ -11,17 +11,22 @@ A Flask-based REST API starter for processing weather measurement data and provi
 
 ## Setup
 
-1. Navigate to the backend directory:
+1. Clone the repository
+```bash
+git clone git@github.com:MrJusticeShai/utilifeed-interviews-assessment.git
+```
+
+2. Navigate to the backend directory:
 ```bash
 cd backend
 ```
 
-2. Create a virtual environment (recommended):
+3. Create a virtual environment (recommended):
 ```bash
 python -m venv venv
 ```
 
-3. Activate the virtual environment:
+4. Activate the virtual environment:
    - On Linux/Mac:
      ```bash
      source venv/bin/activate
@@ -31,7 +36,7 @@ python -m venv venv
      venv\Scripts\activate
      ```
 
-4. Install dependencies:
+5. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
@@ -43,7 +48,7 @@ Start the Flask development server:
 python app.py
 ```
 
-The server will start on `http://localhost:5000`
+The server will start on `http://localhost:5001`
 
 ## API Endpoints
 
