@@ -92,6 +92,21 @@ def load_city_data_from_file(file_path):
         city_stats[city] = stats
     return city_stats
 
+def get_city_by_name(city_stats_map, city_name):
+    city_name_lowercase = city_name.strip().lower()
+    for city, stats in city_stats_map.items():
+        if city.lower() == city_name_lowercase:
+            return stats
+    return None
+
+def get_city_by_search(city_stats_map, search_query):
+    query_lowercase = search_query.strip().lower()
+    result = {}
+    for city, stats in city_stats_map.items():
+        if query_lowercase in city.lower():
+            result[city] = stats
+    return result
+
 
 @app.route('/api/cities', methods=['GET'])
 def get_cities():
