@@ -41,19 +41,45 @@ function App() {
 
   // Fetch city data from backend
   const loadCities = async (query = '') => {
-    setLoadingCities(true)  // Set loading state before fetch
-    setCitiesError(null)    // Clear previous errors
+    setLoadingCities(true)
+    setCitiesError(null)
 
     try {
-      const data = await fetchCities(query) // Call /api/cities?search=query
-      setCities(data.cities || {})          // Update cities state
+      if (query) {
+        const data = await fetchCities(query) // Partial search
+        const citiesFound = data.cities || {}
+
+        // Check for exact match (case-insensitive)
+        const exactMatchKey = Object.keys(citiesFound).find(
+          city => city.toLowerCase() === query.toLowerCase()
+        )
+
+        if (exactMatchKey) {
+          try {
+            const exactCityData = await fetchCity(exactMatchKey)
+            setCities({ [exactMatchKey]: exactCityData.statistics }) // Show only exact match
+          } catch (err) {
+            console.warn(`Exact fetch failed for city "${exactMatchKey}"`, err)
+            setCities({ [exactMatchKey]: citiesFound[exactMatchKey] }) // fallback
+          }
+        } else {
+          setCities(citiesFound)
+          if (Object.keys(citiesFound).length === 0) {
+            setCitiesError(`No cities found for "${query}"`)
+          }
+        }
+      } else {
+        const data = await fetchCities('')
+        setCities(data.cities || {})
+      }
     } catch (err) {
-      setCitiesError('Failed to load city data. Please try again.') // Error message
-      setCities({})                         // Clear previous data on error
+      setCitiesError('Failed to load city data.')
+      setCities({})
     } finally {
-      setLoadingCities(false)               // Done loading
+      setLoadingCities(false)
     }
   }
+
 
   // -------------------------
   // Event Handlers
