@@ -114,9 +114,20 @@ def get_cities():
     """
     all_city_statistics = load_city_data_from_file(DATA_FILE_PATH)
 
+    search_query = request.args.get('search', '').strip().lower()
+
+    filtered_cities = {}
+
+    if search_query: 
+        for city, stats in all_city_statistics.items():
+            if search_query in city.lower():
+                filtered_cities[city] = stats
+    else:
+        filtered_cities = all_city_statistics             
+
     response = {
-        "cities": all_city_statistics,
-        "total_cities": len(all_city_statistics)
+        "cities": filtered_cities,
+        "total_cities": len(filtered_cities)
     } 
 
     return jsonify(response)
