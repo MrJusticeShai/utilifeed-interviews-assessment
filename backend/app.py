@@ -93,12 +93,6 @@ def load_city_data_from_file(file_path):
     return city_stats
 
 # Utility methods
-def get_city_by_name(city_stats_map, city_name):
-    city_name_lowercase = city_name.strip().lower()
-    for city, stats in city_stats_map.items():
-        if city.lower() == city_name_lowercase:
-            return stats
-    return None
 
 def get_city_by_search(city_stats_map, search_query):
     query_lowercase = search_query.strip().lower()
@@ -133,13 +127,13 @@ def get_cities():
     search_query = request.args.get('search', '').strip().lower()
 
     if search_query:
-        filtered = get_city_by_search(all_city_statistics, search_query)
+        filtered_cities = get_city_by_search(all_city_statistics, search_query)
     else:
-        filtered = all_city_statistics             
+        filtered_cities = all_city_statistics             
 
     response = {
-        "cities": all_city_statistics,
-        "total_cities": len(all_city_statistics)
+        "cities": filtered_cities,
+        "total_cities": len(filtered_cities)
     } 
 
     return jsonify(response)
