@@ -174,6 +174,21 @@ def get_city_by_search(city_stats_map, search_query):
             result[city] = stats
     return result
 
+def get_city_by_name(city_stats_map, city_name):
+    if not city_name:
+        return None
+
+    # Normalize search: case-insensitive
+    city_name_lower = city_name.strip().lower()
+
+    # Search for matching city
+    for name, stats in city_stats_map.items():
+        if name.lower() == city_name_lower:
+            return stats
+
+    # Return None if city not found
+    return None
+
 # -----------------------------------------------------------------------------
 # API Routes
 # -----------------------------------------------------------------------------
@@ -236,7 +251,8 @@ def get_city(city_name):
     }
     """
     all_city_stats = load_city_data_from_file(DATA_FILE_PATH)
-    city_weather_stats = all_city_stats.get(city_name)
+    city_weather_stats = get_city_by_name(all_city_stats, city_name)
+
     if city_weather_stats:
         response = {
             "city": city_name,
