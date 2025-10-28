@@ -33,6 +33,10 @@ CORS(app)  # Enable CORS for local development
 
 DATA_FILE_PATH = '../measurements.txt'
 
+# -----------------------------------------------------------------------------
+# Core Computation
+# -----------------------------------------------------------------------------
+
 def compute_city_weather_statistics(temperatures):
     """
      Compute min, max, mean, and count statistics for a city's temperature readings.
@@ -66,7 +70,41 @@ def compute_city_weather_statistics(temperatures):
        "count": len(temperatures)
     }
 
+# -----------------------------------------------------------------------------
+# Validation 
+# -----------------------------------------------------------------------------
 def parse_and_validate_record(line, line_number):
+    """
+    Validate and parse a single line from the input file containing city and temperature data.
+
+    The expected line format is:
+        CityName;Temperature
+    Where:
+        - CityName contains only letters (including accented), spaces, hyphens, or apostrophes.
+        - Temperature is a valid floating-point number.
+
+    Args:
+        line (str): A single line from the input file.
+        line_number (int): Line number in the file (for logging and warnings).
+
+    Returns:
+        tuple: (city_name, temperature) if the line is valid.
+        None: if the line is blank or fails validation.
+    
+    Validation Steps:
+        1. Skip empty lines.
+        2. Ensure exactly one semicolon is present.
+        3. Trim whitespace from city and temperature.
+        4. Validate city name using a regex pattern.
+        5. Convert temperature to float; skip line if invalid.
+
+    Examples:
+        >>> parse_and_validate_record("Paris;21.5", 1)
+        ('Paris', 21.5)
+
+        >>> parse_and_validate_record("InvalidCity123;20", 2)
+        None
+    """
     # Trim and skip blank lines
     line = line.strip()
     if not line:
@@ -89,7 +127,22 @@ def parse_and_validate_record(line, line_number):
         return None
     return city_name, temperature
 
+
+# -----------------------------------------------------------------------------
+# File Processing
+# -----------------------------------------------------------------------------
+
 def load_city_data_from_file(file_path):
+    """
+    Load and process temperature data from a text file.
+
+    Args:
+        file_path (str): Path to the data file.
+
+    Returns:
+        dict[str, dict]: Mapping of city name to computed statistics.
+    """
+
     city_data = {}
 
     try:
@@ -109,7 +162,9 @@ def load_city_data_from_file(file_path):
         city_stats[city] = stats
     return city_stats
 
-# Utility methods
+# -----------------------------------------------------------------------------
+# Utility Function
+# -----------------------------------------------------------------------------
 
 def get_city_by_search(city_stats_map, search_query):
     query_lowercase = search_query.strip().lower()
@@ -119,11 +174,18 @@ def get_city_by_search(city_stats_map, search_query):
             result[city] = stats
     return result
 
+# -----------------------------------------------------------------------------
+# API Routes
+# -----------------------------------------------------------------------------
 
 @app.route('/api/cities', methods=['GET'])
 def get_cities():
     """
-    Get temperature statistics for all cities.
+    Retrieve statistics for all cities or filtered by search query (?search=...).
+
+    Example:
+        GET /api/cities
+        GET /api/cities?search=lon
     
     Query parameters:
         search (str): Optional search query to filter cities by name
