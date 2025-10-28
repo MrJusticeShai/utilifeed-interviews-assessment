@@ -119,7 +119,7 @@ def parse_and_validate_record(line, line_number):
     city_name = city_name.strip()
     temp_str = temp_str.strip()
 
-    # Attempt to validate temperature
+    # Validate temperature
     try:
         temperature = float(temp_str)
     except ValueError:
