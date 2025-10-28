@@ -112,6 +112,14 @@ def get_cities():
         }
     
     """
+    all_city_statistics = load_city_data_from_file(DATA_FILE_PATH)
+
+    response = {
+        "cities": all_city_statistics,
+        "total_cities": len(all_city_statistics)
+    } 
+
+    return jsonify(response)
 
 # @app.route('/api/cities/<city_name>', methods=['GET'])
 # def get_city(city_name):
@@ -132,6 +140,7 @@ def get_cities():
 #     }
 #     """
 #     pass
+
 
 def test_file_loading():
     stats = load_city_data_from_file(DATA_FILE_PATH)
