@@ -64,11 +64,6 @@ def parse_and_validate_record(line, line_number):
     city_name = city_name.strip()
     temp_str = temp_str.strip()
 
-    # Validate city name (letters, spaces, hyphens, apostrophes allowed)
-    if not re.match(r"^[A-Za-zÀ-ÿ' -]+$", city_name):
-        print(f" Warning: Invalid city name on line {line_number}: '{city_name}'")
-        return None
-
     # Attempt to validate temperature
     try:
         temperature = float(temp_str)
@@ -98,33 +93,26 @@ def load_city_data_from_file(file_path):
     return city_stats
 
 
-# @app.route('/api/cities', methods=['GET'])
-# def get_cities():
-#     """
-#     Get temperature statistics for all cities.
-#     
-#     Query parameters:
-#         search (str): Optional search query to filter cities by name
-#     
-#     Returns:
-#         JSON response with city statistics in the format:
-#         {
-#             "cities": {
-#                 "CityName": {"min": float, "max": float, "mean": float, "count": int},
-#                 ...
-#             },
-#             "total_cities": int
-#         }
-#     
-#     Hints:
-#     - The data file is at: '../measurements.txt' (relative to this file)
-#     - Each line format: "CityName;Temperature"
-#     - You need to calculate min, max, mean (rounded to 1 decimal) for each city
-#     - Handle invalid/malformed rows gracefully
-#     - Support optional ?search=query parameter to filter cities
-#     """
-#     pass
-#
+@app.route('/api/cities', methods=['GET'])
+def get_cities():
+    """
+    Get temperature statistics for all cities.
+    
+    Query parameters:
+        search (str): Optional search query to filter cities by name
+    
+    Returns:
+        JSON response with city statistics in the format:
+        {
+            "cities": {
+                "CityName": {"min": float, "max": float, "mean": float, "count": int},
+                ...
+            },
+            "total_cities": int
+        }
+    
+    """
+
 # @app.route('/api/cities/<city_name>', methods=['GET'])
 # def get_city(city_name):
 #     """
