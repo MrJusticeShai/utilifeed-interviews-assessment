@@ -34,6 +34,23 @@ CORS(app)  # Enable CORS for local development
 DATA_FILE_PATH = '../measurements.txt'
 
 def compute_city_weather_statistics(temperatures):
+    """
+     Compute min, max, mean, and count statistics for a city's temperature readings.
+
+    Args:
+        temperatures (list[float]): List of temperature readings for a city.
+
+    Returns:
+        dict[str, float | int | None]: Dictionary containing:
+            - "min": Minimum temperature
+            - "max": Maximum temperature
+            - "mean": Rounded average temperature
+            - "count": Number of measurements
+
+    Example:
+        >>> calculate_city_stats([18.2, 21.5, 19.7])
+        {'min': 18.2, 'max': 21.5, 'mean': 19.8, 'count': 3}
+    """
     # Handle the edge case where there are no temperature readings
     if not temperatures:
         return {"min": None, "max": None, "mean": None,  "count": 0}
