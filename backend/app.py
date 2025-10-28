@@ -25,6 +25,7 @@ Run:
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import os
+import re
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for local development
@@ -33,16 +34,49 @@ CORS(app)  # Enable CORS for local development
 DATA_FILE_PATH = '../measurement.txt'
 
 def compute_city_weather_statistics(temperatures):
+    # Handle the edge case where there are no temperature readings
     if not temperatures:
         return {"min": None, "max": None, "mean": None,  "count": 0}
+    
+    # Compute the average temperature
     mean_temperature = sum(temperatures)/len(temperatures)
+
+    # Return the statistics dictionary
     return {
        "min": min(temperatures), 
        "max": max(temperatures), 
        "mean": round(mean_temperature, 1), 
        "count": len(temperatures)
     }
+
+def parse_and_validate_record(line, line_number):
+    # Trim and skip blank lines
+    line = line.strip()
+    if not line:
+        return None
     
+    # Must contain exactly one semicolon
+    parts = line.split(';')
+    if len(parts) != 2:
+        print(f" Warning: Invalid format on line {line_number}: '{line}' (must contain one ';')")
+        return None
+    city_name, temp_str = parts
+    city_name = city_name.strip()
+    temp_str = temp_str.strip()
+
+    # Validate city name (letters, spaces, hyphens, apostrophes allowed)
+    if not re.match(r"^[A-Za-zÀ-ÿ' -]+$", city_name):
+        print(f" Warning: Invalid city name on line {line_number}: '{city_name}'")
+        return None
+
+    # Attempt to validate temperature
+    try:
+        temperature = float(temp_str)
+    except ValueError:
+        print(f" Warning: Invalid temperature on line {line_number}: '{temp_str}'")
+        return None
+    return city_name, temperature
+
 
 # @app.route('/api/cities', methods=['GET'])
 # def get_cities():
