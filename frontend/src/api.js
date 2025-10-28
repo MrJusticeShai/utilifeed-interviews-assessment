@@ -1,9 +1,9 @@
 const API_BASE_URL = 'http://127.0.0.1:5000';
 
 /**
- * TODO: Implement this function to fetch all cities with their temperature statistics
+ * A function to fetch all cities with their temperature statistics
  * 
- * This should call GET /api/cities (with optional ?search=query parameter)
+ * This calls GET /api/cities (with optional ?search=query parameter)
  * 
  * @param {string} searchQuery - Optional search query to filter cities
  * @returns {Promise<Object>} Response with cities data in the format:
@@ -12,8 +12,8 @@ const API_BASE_URL = 'http://127.0.0.1:5000';
  *   total_cities: number
  * }
  * 
- * Hint: Use the fetch API to make the HTTP request
- * Hint: Don't forget to handle errors appropriately
+ * Used the fetch API to make the HTTP request
+ * Handled errors appropriately
  */
 export async function fetchCities(searchQuery = '') {
   try {
@@ -31,9 +31,10 @@ export async function fetchCities(searchQuery = '') {
 }
 
 /**
- * TODO: Implement this function to fetch statistics for a specific city
+ *  A function to fetch statistics for a specific city
+
  * 
- * This should call GET /api/cities/{cityName}
+ * This calls GET /api/cities/{cityName}
  * 
  * @param {string} cityName - Name of the city
  * @returns {Promise<Object>} Response with city statistics in the format:
@@ -42,8 +43,8 @@ export async function fetchCities(searchQuery = '') {
  *   statistics: { min, max, mean, count }
  * }
  * 
- * Hint: Use encodeURIComponent for the city name in the URL
- * Hint: Handle 404 errors for cities that don't exist
+ * Used encodeURIComponent for the city name in the URL
+ * Handled 404 errors for cities that don't exist
  */
 export async function fetchCity(cityName) {
   try {

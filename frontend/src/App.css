@@ -184,9 +184,6 @@
   font-weight: bold;
 }
 
-.city-table th:nth-child(n+2) {
-  text-align: right;
-}
 
 .city-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;

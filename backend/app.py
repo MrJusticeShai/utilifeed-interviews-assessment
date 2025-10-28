@@ -167,6 +167,12 @@ def load_city_data_from_file(file_path):
 # -----------------------------------------------------------------------------
 
 def get_city_by_search(city_stats_map, search_query):
+    """
+    Filter cities containing the search query (case-insensitive).
+
+    Returns:
+        dict: city_name -> stats
+    """
     query_lowercase = search_query.strip().lower()
     result = {}
     for city, stats in city_stats_map.items():
@@ -175,6 +181,12 @@ def get_city_by_search(city_stats_map, search_query):
     return result
 
 def get_city_by_name(city_stats_map, city_name):
+    """
+    Fetch exact city statistics (case-insensitive).
+
+    Returns:
+        dict or None
+    """
     if not city_name:
         return None
 
