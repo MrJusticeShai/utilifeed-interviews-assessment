@@ -132,25 +132,35 @@ def get_cities():
 
     return jsonify(response)
 
-# @app.route('/api/cities/<city_name>', methods=['GET'])
-# def get_city(city_name):
-#     """
-#     Get temperature statistics for a specific city.
-#     
-#     Args:
-#         city_name (str): Name of the city
-#     
-#     Returns:
-#         JSON response with city statistics
-#         Return 404 if city not found
-#     
-#     Example response:
-#     {
-#         "city": "Hamburg",
-#         "statistics": {"min": -10.5, "max": 35.2, "mean": 12.4, "count": 842}
-#     }
-#     """
-#     pass
+@app.route('/api/cities/<city_name>', methods=['GET'])
+def get_city(city_name):
+    """
+    Get temperature statistics for a specific city.
+    
+    Args:
+        city_name (str): Name of the city
+    
+    Returns:
+        JSON response with city statistics
+        Return 404 if city not found
+    
+    Example response:
+    {
+        "city": "Hamburg",
+        "statistics": {"min": -10.5, "max": 35.2, "mean": 12.4, "count": 842}
+    }
+    """
+    all_city_stats = load_city_data_from_file(DATA_FILE_PATH)
+    city_weather_stats = all_city_stats.get(city_name)
+    if city_weather_stats:
+        response = {
+            "city": city_name,
+            "statistics": city_weather_stats
+        }
+        return jsonify(response)
+    else:
+        return jsonify({"error": f"City '{city_name}' not found"}), 404
+
 
 
 def test_file_loading():
