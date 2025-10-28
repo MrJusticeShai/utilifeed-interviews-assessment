@@ -1,3 +1,27 @@
+"""
+Weather City Statistics API 
+
+This Flask application exposes REST endpoints for processing and retrieving
+temperature statistics from a text file containing city temperature readings.
+
+Each line in the data file follows the format:
+    CityName;Temperature
+
+Example:
+    Belgrade;14.3
+    Dar es Salaam;35.5
+    Palembang;27.9
+
+The API provides:
+    - /api/cities: Returns all city statistics or filters by a search query.
+    - /api/cities/<city_name>: Returns statistics for a specific city.
+    - /api/health: Health check endpoint.
+
+Run:
+    $ python app.py
+
+"""
+
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import os
@@ -5,13 +29,21 @@ import os
 app = Flask(__name__)
 CORS(app)  # Enable CORS for local development
 
-# TODO: Implement the following endpoints
-# You will need to:
-# 1. Read and parse the measurements file (measurements.txt)
-# 2. Process the data to calculate min, max, and mean temperatures per city
-# 3. Handle invalid data rows appropriately
-# 4. Return the data in the specified JSON format
-# 
+
+DATA_FILE_PATH = '../measurement.txt'
+
+def compute_city_weather_statistics(temperatures):
+    if not temperatures:
+        return {"min": None, "max": None, "mean": None,  "count": 0}
+    mean_temperature = sum(temperatures)/len(temperatures)
+    return {
+       "min": min(temperatures), 
+       "max": max(temperatures), 
+       "mean": round(mean_temperature, 1), 
+       "count": len(temperatures)
+    }
+    
+
 # @app.route('/api/cities', methods=['GET'])
 # def get_cities():
 #     """
