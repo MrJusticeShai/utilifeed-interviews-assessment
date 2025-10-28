@@ -22,6 +22,9 @@ function App() {
   // Keep track of the search input
   const [searchQuery, setSearchQuery] = useState('')
 
+  // Sorting state
+  const [sortConfig, setSortConfig] = useState({ key: 'city', direction: 'asc' })
+
   useEffect(() => {
     checkApiHealth()
     loadCities()
@@ -55,15 +58,29 @@ function App() {
   // -------------------------
   // Event Handlers
   // -------------------------
-
-  // Called whenever the search input changes
   const handleSearchChange = (e) => {
     const query = e.target.value
-    setSearchQuery(query)       // Update input state
-    loadCities(query)           // Fetch filtered city data
+    setSearchQuery(query)
+    loadCities(query)
   }
 
+  const handleSort = (columnKey) => {
+    let direction = 'asc'
+    if(sortConfig.key === columnKey && sortConfig.direction === 'asc') {
+      direction = 'desc'
+    }
+    setSortConfig({ key: columnKey, direction })
+  }
 
+  const sortedCities = Object.entries(cities).sort(([cityA, statsA], [cityB, statsB]) => {
+    const { key, direction } = sortConfig
+    let valA = key === 'city' ? cityA : statsA[key]
+    let valB = key === 'city' ? cityB : statsB[key]
+
+    if (valA < valB) return direction === 'asc' ? -1 : 1
+    if (valA > valB) return direction === 'asc' ? 1 : -1
+    return 0
+  })
 
 
   return (
@@ -122,15 +139,15 @@ function App() {
               <table className="city-table">
                 <thead>
                   <tr>
-                    <th>City</th>
-                    <th>Min</th>
-                    <th>Max</th>
-                    <th>Mean</th>
-                    <th>Count</th>
+                    <th onClick={() => handleSort('city')}>City</th>
+                    <th onClick={() => handleSort('min')}>Min</th>
+                    <th onClick={() => handleSort('max')}>Max</th>
+                    <th onClick={() => handleSort('mean')}>Mean</th>
+                    <th onClick={() => handleSort('count')}>Count</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {Object.entries(cities).map(([cityName, stats]) => (
+                  {sortedCities.map(([cityName, stats]) => (
                     <tr key={cityName}>
                       <td>{cityName}</td>
                       <td>{stats.min}</td>
