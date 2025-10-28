@@ -91,12 +91,14 @@ function App() {
   // -------------------------
   // Event Handlers
   // -------------------------
+  // Dynamic searching
   const handleSearchChange = (e) => {
     const query = e.target.value
     setSearchQuery(query)
     loadCities(query)
   }
 
+  // Handle sort based on key
   const handleSort = (columnKey) => {
     let direction = 'asc'
     if(sortConfig.key === columnKey && sortConfig.direction === 'asc') {
@@ -105,6 +107,7 @@ function App() {
     setSortConfig({ key: columnKey, direction })
   }
 
+  
   const sortedCities = Object.entries(cities).sort(([cityA, statsA], [cityB, statsB]) => {
     const { key, direction } = sortConfig
     let valA = key === 'city' ? cityA : statsA[key]
