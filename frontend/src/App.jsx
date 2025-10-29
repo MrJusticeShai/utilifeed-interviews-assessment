@@ -40,18 +40,24 @@ function App() {
   }
 
   const handleExactSearch = async () => {
+    // If the search query is empty, exit early (no need to send a request)
     if (!searchQuery) return;
 
+    // Show loading spinner and clear previous errors
     setLoadingCities(true);
     setCitiesError(null);
 
     try {
+      // Fetch data for the exact city name 
       const exactCityData = await fetchCity(searchQuery);
+      // Update state with a single city result
       setCities({ [searchQuery]: exactCityData.statistics });
     } catch (err) {
+      // If the city was not found or request failed, show an error message
       setCitiesError(`No city found with the name "${searchQuery}"`);
       setCities({});
     } finally {
+      // Hide loading spinner regardless of success or failure
       setLoadingCities(false);
     }
   }
@@ -107,7 +113,7 @@ function App() {
     setSortConfig({ key: columnKey, direction })
   }
 
-  
+
   const sortedCities = Object.entries(cities).sort(([cityA, statsA], [cityB, statsB]) => {
     const { key, direction } = sortConfig
     let valA = key === 'city' ? cityA : statsA[key]
